@@ -17,7 +17,26 @@ import {
 export const dynamic = "force-dynamic";
 
 import { notFound } from "next/navigation";
+import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db/prisma";
+
+type FacilityDetail = Prisma.FacilityGetPayload<{
+  include: {
+    images: true;
+    categories: true;
+    services: true;
+    reviews: true;
+  };
+}>;
+
+const facilityDetailInclude = {
+  images: true,
+  categories: true,
+  services: true,
+  reviews: {
+    where: { isApproved: true },
+  },
+} satisfies Prisma.FacilityInclude;
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -83,40 +102,19 @@ export default async function FacilityDetailPage({ params }: PageProps) {
   const safeSlug = slug || "demo-facility";
 
   // Query facility details dynamically from Neon database
-  let dbFacility = await prisma.facility.findUnique({
+  let dbFacility: FacilityDetail | null = await prisma.facility.findUnique({
     where: { slug: safeSlug },
-    include: {
-      images: true,
-      categories: true,
-      services: true,
-      reviews: {
-        where: { isApproved: true },
-      },
-    },
+    include: facilityDetailInclude,
   });
 
   if (!dbFacility && safeSlug === "demo-facility") {
     dbFacility = await prisma.facility.findFirst({
       where: { isFeatured: true },
-      include: {
-        images: true,
-        categories: true,
-        services: true,
-        reviews: {
-          where: { isApproved: true },
-        },
-      },
+      include: facilityDetailInclude,
     });
     if (!dbFacility) {
       dbFacility = await prisma.facility.findFirst({
-        include: {
-          images: true,
-          categories: true,
-          services: true,
-          reviews: {
-            where: { isApproved: true },
-          },
-        },
+        include: facilityDetailInclude,
       });
     }
   }
