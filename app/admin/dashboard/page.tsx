@@ -19,7 +19,7 @@ export default async function AdminDashboardPage() {
     }),
   ]);
 
-  const totalOpenBeds = facilities.reduce((sum, f) => sum + f.bedsAvailable, 0);
+  const totalOpenBeds = facilities.reduce((sum: number, f: { bedsAvailable: number }) => sum + f.bedsAvailable, 0);
 
   const STATS = [
     { label: "Total Facilities", value: facilitiesCount, icon: Activity, color: "text-blue-600 bg-blue-50 border-blue-100" },
