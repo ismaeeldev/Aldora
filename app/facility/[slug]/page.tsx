@@ -126,7 +126,7 @@ export default async function FacilityDetailPage({ params }: PageProps) {
   }
 
   // Calculate dynamic review metrics
-  const totalRating = dbFacility.reviews.reduce((sum, r) => sum + r.rating, 0);
+  const totalRating = dbFacility.reviews.reduce((sum: number, r: { rating: number }) => sum + r.rating, 0);
   const rating = dbFacility.reviews.length > 0 ? Number((totalRating / dbFacility.reviews.length).toFixed(1)) : 4.8;
   const reviewCount = dbFacility.reviews.length;
 
