@@ -5,6 +5,21 @@ import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
+type FacilityRow = {
+  id: string;
+  name: string;
+  slug: string;
+  city: string;
+  state: string;
+  bedsAvailable: number;
+  bedsCount: number;
+  priceMin: number;
+  priceMax: number | null;
+  isVerified: boolean;
+  isFeatured: boolean;
+  reviews: { rating: number }[];
+};
+
 export default async function AdminDashboardPage() {
   // Query stats from Neon
   const [facilitiesCount, reviewsCount, inquiriesCount, facilities] = await Promise.all([
@@ -19,7 +34,8 @@ export default async function AdminDashboardPage() {
     }),
   ]);
 
-  const totalOpenBeds = facilities.reduce((sum: number, f: { bedsAvailable: number }) => sum + f.bedsAvailable, 0);
+  const typedFacilities = facilities as FacilityRow[];
+  const totalOpenBeds = typedFacilities.reduce((sum: number, f: FacilityRow) => sum + f.bedsAvailable, 0);
 
   const STATS = [
     { label: "Total Facilities", value: facilitiesCount, icon: Activity, color: "text-blue-600 bg-blue-50 border-blue-100" },
@@ -98,7 +114,7 @@ export default async function AdminDashboardPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-border text-slate-600 text-sm">
-              {facilities.slice(0, 5).map((fac) => (
+              {typedFacilities.slice(0, 5).map((fac: FacilityRow) => (
                 <tr key={fac.id} className="hover:bg-muted/20 transition-colors">
                   <td className="p-4 pl-6 font-semibold text-slate-900">
                     {fac.name}

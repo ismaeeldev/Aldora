@@ -102,9 +102,9 @@ export default async function AdminFacilitiesPage({
             <p className="text-slate-500 font-medium">No facilities found matching your search.</p>
           </div>
         ) : (
-          facilities.map((facility) => {
+          facilities.map((facility: { id: string; name: string; slug: string; city: string; state: string; bedsAvailable: number; bedsCount: number; priceMin: number; priceMax: number | null; isVerified: boolean; isFeatured: boolean; images: { url: string }[]; reviews: { rating: number }[] }) => {
             const avgRating = facility.reviews.length
-              ? (facility.reviews.reduce((sum: number, r: any) => sum + r.rating, 0) / facility.reviews.length).toFixed(1)
+              ? (facility.reviews.reduce((sum: number, r: { rating: number }) => sum + r.rating, 0) / facility.reviews.length).toFixed(1)
               : null;
 
             return (
