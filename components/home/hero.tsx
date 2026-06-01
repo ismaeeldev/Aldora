@@ -85,7 +85,10 @@ export function Hero() {
   return (
     <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden py-24 md:py-32">
       {/* Background Imagery */}
-      <div 
+      <motion.div 
+        initial={{ scale: 1 }}
+        animate={{ scale: 1.05 }}
+        transition={{ duration: 20, ease: "linear", repeat: Infinity, repeatType: "reverse" }}
         className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat bg-slate-900"
         style={{
           backgroundImage: `url('/images/wellness_hero_bg.png')`,
@@ -94,10 +97,15 @@ export function Hero() {
         {/* Layered calming overlays for maximum contrast & premium medical feeling */}
         <div className="absolute inset-0 bg-gradient-to-r from-slate-950/80 via-slate-900/60 to-slate-950/80" />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-slate-950/40" />
-      </div>
+      </motion.div>
 
       {/* Hero Content Container */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 md:px-8 flex flex-col items-center text-center">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: [0.21, 0.47, 0.32, 0.98] }}
+        className="relative z-10 w-full max-w-7xl mx-auto px-4 md:px-8 flex flex-col items-center text-center"
+      >
         
         {/* Top Accent Badge */}
         <motion.div
@@ -320,27 +328,24 @@ export function Hero() {
           ))}
         </motion.div>
 
-        {/* Brand/Trust badges (calming feel) */}
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
+        {/* Trust Badges */}
+        <motion.div 
+          initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-          className="mt-16 w-full border-t border-white/10 pt-8 grid grid-cols-1 sm:grid-cols-3 gap-6 text-slate-300"
+          transition={{ duration: 0.8, delay: 0.3, ease: [0.21, 0.47, 0.32, 0.98] }}
+          className="mt-12 flex flex-wrap justify-center gap-6 md:gap-8"
         >
-          {TRUST_TAGS.map((tag, idx) => {
-            const IconComponent = tag.icon;
-            return (
-              <div key={idx} className="flex items-center justify-center gap-2.5">
-                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-white/5 border border-white/10">
-                  <IconComponent className="h-4.5 w-4.5 text-secondary-foreground" />
-                </div>
-                <span className="text-xs md:text-sm font-medium tracking-wide">{tag.text}</span>
+          {TRUST_TAGS.map((tag, idx) => (
+            <div key={idx} className="flex items-center gap-2 text-slate-300">
+              <div className="h-6 w-6 rounded-full bg-primary/20 flex items-center justify-center text-primary backdrop-blur-sm border border-primary/30">
+                <tag.icon className="h-3 w-3" />
               </div>
-            );
-          })}
+              <span className="text-xs font-medium tracking-wide">{tag.text}</span>
+            </div>
+          ))}
         </motion.div>
 
-      </div>
+      </motion.div>
     </section>
   );
 }

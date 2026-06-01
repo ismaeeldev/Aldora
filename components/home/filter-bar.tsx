@@ -176,7 +176,7 @@ export function FilterBar() {
   };
 
   return (
-    <div className="sticky top-16 z-30 w-full bg-surface border-b border-border py-3 shadow-sm">
+    <div className="sticky top-16 z-30 w-full bg-surface border-b border-border py-3 shadow-sm transition-shadow duration-300 hover:shadow-md">
       <div className="max-w-7xl mx-auto px-4 md:px-8 flex items-center justify-between gap-4">
 
         {/* Pills wrapper with horizontal scrolling support */}

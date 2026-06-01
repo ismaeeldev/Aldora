@@ -5,6 +5,7 @@ import { MapWrapper } from "@/components/map/MapWrapper";
 import { prisma } from "@/lib/db/prisma";
 import Script from "next/script";
 import { Search, ShieldCheck, MessageCircle } from "lucide-react";
+import { FadeIn } from "@/components/shared/fade-in";
 
 export const dynamic = "force-dynamic";
 
@@ -108,9 +109,11 @@ export default async function Home() {
             </div>
 
             {/* Grid structure (1 col mobile, 2 col tablet, 3 col desktop) */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 animate-fade-in">
-              {listings.map((listing) => (
-                <ListingCard key={listing.id} {...listing} />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {listings.map((listing, idx) => (
+                <FadeIn key={listing.id} delay={idx * 0.1}>
+                  <ListingCard {...listing} />
+                </FadeIn>
               ))}
             </div>
           </div>
@@ -119,7 +122,7 @@ export default async function Home() {
         {/* Leaflet Map Section */}
         <section className="py-24 md:py-32 px-4 md:px-8 bg-surface border-t border-border">
           <div className="max-w-7xl mx-auto">
-            <div className="mb-10 text-center md:text-left">
+            <FadeIn className="mb-10 text-center md:text-left">
               <span className="text-xs uppercase font-bold tracking-wider text-primary block mb-3">
                 Geographic Intake Match
               </span>
@@ -129,28 +132,30 @@ export default async function Home() {
               <p className="text-slate-600 text-sm mt-1">
                 Zoom and click individual facility pins to view open bed statuses.
               </p>
-            </div>
+            </FadeIn>
 
             {/* Map Container */}
-            <div className="h-[450px] w-full rounded-2xl border border-border shadow-md overflow-hidden relative">
+            <FadeIn delay={0.2} className="h-[450px] w-full rounded-2xl border border-border shadow-md overflow-hidden relative">
               <MapWrapper
                 center={[33.5794, -112.1124]} // Center of Phoenix, AZ area
                 zoom={10}
                 markers={mapMarkers}
               />
-            </div>
+            </FadeIn>
           </div>
         </section>
 
         {/* Feature grid to showcase luxury medical brand style */}
         <section className="bg-surface py-24 md:py-32 px-4 md:px-8 border-t border-border">
           <div className="max-w-7xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-800">
-              Simplifying the search for recovery
-            </h2>
-            <p className="mt-4 text-lg text-slate-600 max-w-2xl mx-auto font-light">
-              Connecting patients, families, and healthcare providers to verified and trustworthy treatment clinics.
-            </p>
+            <FadeIn>
+              <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-800">
+                Simplifying the search for recovery
+              </h2>
+              <p className="mt-4 text-lg text-slate-600 max-w-2xl mx-auto font-light">
+                Connecting patients, families, and healthcare providers to verified and trustworthy treatment clinics.
+              </p>
+            </FadeIn>
 
             <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
               {[
@@ -172,13 +177,15 @@ export default async function Home() {
               ].map((feature, idx) => {
                 const IconComponent = feature.icon;
                 return (
-                  <div key={idx} className="p-8 rounded-3xl border border-border/50 bg-background shadow-sm hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] hover:-translate-y-1.5 transition-all duration-300 text-left group">
-                    <div className="h-12 w-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                      <IconComponent className="h-6 w-6" />
+                  <FadeIn key={idx} delay={0.1 + idx * 0.1}>
+                    <div className="p-8 rounded-3xl h-full border border-border/50 bg-background shadow-sm hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] hover:-translate-y-1.5 transition-all duration-300 text-left group">
+                      <div className="h-12 w-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                        <IconComponent className="h-6 w-6" />
+                      </div>
+                      <h3 className="text-xl font-bold text-slate-800 mb-3">{feature.title}</h3>
+                      <p className="text-slate-500 text-sm leading-relaxed">{feature.desc}</p>
                     </div>
-                    <h3 className="text-xl font-bold text-slate-800 mb-3">{feature.title}</h3>
-                    <p className="text-slate-500 text-sm leading-relaxed">{feature.desc}</p>
-                  </div>
+                  </FadeIn>
                 );
               })}
             </div>
