@@ -83,7 +83,7 @@ export function InquiryForm({ facilityId }: InquiryFormProps) {
             aria-invalid={!!errors.name}
             aria-describedby={errors.name ? "name-error" : undefined}
             {...register("name")} 
-            className="h-11 rounded-xl bg-slate-50 text-sm md:text-base border-border focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1" 
+            className="h-12 rounded-xl bg-slate-50 text-sm md:text-base border-border focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1" 
             placeholder="John Doe" 
           />
           {errors.name && <p id="name-error" className="text-[11px] font-medium text-destructive">{errors.name.message}</p>}
@@ -100,7 +100,7 @@ export function InquiryForm({ facilityId }: InquiryFormProps) {
               aria-describedby={errors.email ? "email-error" : undefined}
               {...register("email")} 
               type="email"
-              className="h-11 rounded-xl bg-slate-50 text-sm md:text-base border-border focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1" 
+              className="h-12 rounded-xl bg-slate-50 text-sm md:text-base border-border focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1" 
               placeholder="john@example.com" 
             />
             {errors.email && <p id="email-error" className="text-[11px] font-medium text-destructive">{errors.email.message}</p>}
@@ -114,7 +114,7 @@ export function InquiryForm({ facilityId }: InquiryFormProps) {
               id="phone"
               {...register("phone")} 
               type="tel"
-              className="h-11 rounded-xl bg-slate-50 text-sm md:text-base border-border focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1" 
+              className="h-12 rounded-xl bg-slate-50 text-sm md:text-base border-border focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1" 
               placeholder="(555) 123-4567" 
             />
           </div>
@@ -127,7 +127,7 @@ export function InquiryForm({ facilityId }: InquiryFormProps) {
           <Input 
             id="insurance"
             {...register("insurance")} 
-            className="h-11 rounded-xl bg-slate-50 text-sm md:text-base border-border focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1" 
+            className="h-12 rounded-xl bg-slate-50 text-sm md:text-base border-border focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1" 
             placeholder="e.g. BlueCross, Medicare, etc." 
           />
         </div>
@@ -152,12 +152,12 @@ export function InquiryForm({ facilityId }: InquiryFormProps) {
       <Button
         type="submit"
         disabled={isSubmitting}
-        className="w-full h-12 rounded-xl bg-primary hover:bg-primary-hover text-white font-semibold text-base shadow-md transition-all active:scale-95"
+        className="w-full h-14 text-base font-bold uppercase tracking-wide bg-primary text-primary-foreground shadow-sm hover:brightness-105 transition-all active:scale-95"
       >
         {isSubmitting ? (
           <><Loader2 className="mr-2 h-5 w-5 animate-spin" /> Sending...</>
         ) : (
-          "Send Inquiry"
+          "CONTACT THIS FACILITY"
         )}
       </Button>
       <p className="text-center text-[11px] text-slate-500 mt-2 font-medium">

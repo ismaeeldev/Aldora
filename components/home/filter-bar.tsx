@@ -1,10 +1,12 @@
+// Force Turbopack cache invalidation
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, Check, X, Filter } from "lucide-react";
+import { ChevronDown, Check, X, Filter, Search } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useRouter, useSearchParams } from "next/navigation";
 
@@ -60,7 +62,6 @@ const FILTER_DATA: FilterCategory[] = [
       { value: "coed", label: "Co-Ed Programs" },
       { value: "mens", label: "Men's Only" },
       { value: "womens", label: "Women's Only" },
-      { value: "lgbtq", label: "LGBTQ+ Focused" },
     ],
   },
   {
@@ -176,13 +177,24 @@ export function FilterBar() {
   };
 
   return (
-    <div className="sticky top-16 z-30 w-full bg-surface border-b border-border py-3 shadow-sm transition-shadow duration-300 hover:shadow-md">
-      <div className="max-w-7xl mx-auto px-4 md:px-8 flex items-center justify-between gap-4">
+    <div className="sticky top-16 z-30 w-full bg-surface border-b border-border shadow-sm transition-shadow duration-300 hover:shadow-md py-2">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 flex items-center justify-between gap-3 overflow-x-auto no-scrollbar">
+        {/* Search input with circular cyan button */}
+        <div className="relative flex items-center w-full max-w-[220px] shrink-0">
+          <Input
+            type="text"
+            placeholder="Detox near Phoenix"
+            className="pl-3 pr-11 bg-white h-10 w-full rounded-xl"
+          />
+          <button className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 rounded-lg bg-primary hover:bg-primary-hover flex items-center justify-center text-white transition-colors cursor-pointer border-none outline-none">
+            <Search className="h-4 w-4" />
+          </button>
+        </div>
 
         {/* Pills wrapper with horizontal scrolling support */}
         <div
           ref={containerRef}
-          className="flex items-center gap-2.5 overflow-x-auto no-scrollbar py-0.5 flex-1"
+          className="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5 flex-1"
         >
           {FILTER_DATA.map((category) => {
             const hasSelections = (selectedFilters[category.id] || []).length > 0;
@@ -197,7 +209,7 @@ export function FilterBar() {
                 <div className="relative filter-dropdown-wrapper shrink-0">
                   <PopoverTrigger
                     className={cn(
-                      "inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded-full border transition-all cursor-pointer select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
+                      "inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-full border transition-all cursor-pointer select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
                       hasSelections
                         ? "bg-primary/10 border-primary text-primary hover:bg-primary/25"
                         : "bg-surface border-border text-slate-700 hover:border-slate-300 hover:bg-muted"
@@ -255,7 +267,7 @@ export function FilterBar() {
             type="button"
             onClick={() => setShowMoreFiltersModal(true)}
             className={cn(
-              "inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded-full border transition-all cursor-pointer shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
+              "inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-full border transition-all cursor-pointer shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
               selectedFilters.amenities.length > 0
                 ? "bg-primary/10 border-primary text-primary hover:bg-primary/25"
                 : "bg-surface border-border text-slate-700 hover:border-slate-300 hover:bg-muted"
@@ -281,6 +293,11 @@ export function FilterBar() {
             Reset All
           </button>
         )}
+
+        {/* Save Search button on far right */}
+        <Button className="shrink-0 bg-primary hover:bg-primary-hover text-white rounded-lg px-4 h-10 font-bold text-xs">
+          Save Search
+        </Button>
       </div>
 
       {/* More Filters Modal Dialog */}
@@ -337,7 +354,7 @@ export function FilterBar() {
 
                 {/* Info Disclaimer */}
                 <div className="p-4 bg-muted/50 rounded-xl border border-border/50 text-xs text-slate-500 leading-relaxed">
-                  Aldora verifies all treatment facilities and coordinates with your insurance provider directly. Safe, compliant, and confidential directories.
+                  Liora verifies all treatment facilities and coordinates with your insurance provider directly. Safe, compliant, and confidential directories.
                 </div>
               </div>
 

@@ -48,7 +48,7 @@ export function HeroGallery({ images }: HeroGalleryProps) {
   };
 
   return (
-    <div className="relative w-full rounded-2xl overflow-hidden border border-border shadow-md">
+    <div className="relative w-full rounded-xl overflow-hidden border border-border shadow-sm">
       
       {/* 1. Mobile Carousel Layout (visible on screen widths < md) */}
       <div className="block md:hidden relative overflow-hidden bg-slate-900 aspect-[4/3]" ref={emblaRef}>
@@ -78,54 +78,56 @@ export function HeroGallery({ images }: HeroGalleryProps) {
       </div>
 
       {/* 2. Desktop Split Grid Layout (visible on screen widths >= md) */}
-      {/* Zillow style: 1 large left image, 2 stacked right images */}
-      <div className="hidden md:grid grid-cols-3 gap-2 aspect-[21/9] w-full bg-slate-100">
+      <div className="hidden md:flex flex-col gap-2 w-full">
         
-        {/* Main Cover (Occupies 2/3 width) */}
+        {/* Main Cover (Large Landscape) */}
         <div 
-          className="col-span-2 relative h-full w-full overflow-hidden cursor-pointer group"
+          className="relative w-full aspect-[21/9] overflow-hidden cursor-pointer group rounded-xl"
           onClick={() => openModal(0)}
         >
           <Image
-            src={displayImages[0].url}
+            src={allImages[0].url}
             alt="Facility main view"
             fill
-            className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.015]"
-            sizes="(max-width: 1200px) 70vw, 60vw"
+            className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
+            sizes="100vw"
             priority
           />
           <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-300" />
+          
+          {/* Floating trigger */}
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              openModal(0);
+            }}
+            className="absolute bottom-4 right-4 z-10 flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-slate-800 bg-surface/90 hover:bg-surface border border-border shadow-md rounded-lg hover:brightness-105 active:scale-95 transition-all cursor-pointer"
+          >
+            <ImageIcon className="h-4 w-4" />
+            <span>Show all photos</span>
+          </button>
         </div>
 
-        {/* Stacked Right Panel (Occupies 1/3 width, split dynamically) */}
-        <div className="grid grid-rows-2 gap-2 h-full">
-          {displayImages.slice(1, 3).map((img, idx) => (
+        {/* Row of 4 equal-sized small landscape images aligned directly below */}
+        <div className="grid grid-cols-4 gap-2 w-full aspect-[32/9]">
+          {allImages.slice(1, 5).map((img, idx) => (
             <div
-              key={`right-${img.id}-${idx}`}
-              className="relative h-full w-full overflow-hidden cursor-pointer group"
+              key={`bottom-${img.id}-${idx}`}
+              className="relative h-full w-full overflow-hidden cursor-pointer group rounded-xl border border-border/50"
               onClick={() => openModal(idx + 1)}
             >
               <Image
                 src={img.url}
                 alt={`Facility detail ${idx + 2}`}
                 fill
-                className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
-                sizes="(max-width: 1200px) 35vw, 30vw"
+                className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+                sizes="25vw"
               />
               <div className="absolute inset-0 bg-black/15 group-hover:bg-transparent transition-colors duration-300" />
             </div>
           ))}
         </div>
-
-        {/* Bottom Right: "Show all photos" floating triggers */}
-        <button
-          type="button"
-          onClick={() => openModal(0)}
-          className="absolute bottom-4 right-4 z-10 flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-slate-800 bg-surface/90 hover:bg-surface border border-border shadow-md rounded-lg hover:scale-105 active:scale-95 transition-all cursor-pointer"
-        >
-          <ImageIcon className="h-4 w-4" />
-          <span>Show all photos</span>
-        </button>
       </div>
 
       {/* 3. Fullscreen Modal Image Viewer Overlay (Framer Motion transitions) */}

@@ -8,6 +8,8 @@ import { useRouter } from "next/navigation";
 import { createFacility, updateFacility, uploadImageAction } from "@/lib/actions/facility.actions";
 import { FacilityCreateSchema } from "@/lib/validations/facility";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Loader2, Plus, Trash2, ImageIcon, Upload } from "lucide-react";
 
 type FacilityFormValues = z.infer<typeof FacilityCreateSchema>;
@@ -164,19 +166,19 @@ export function FacilityForm({ initialData, availableServices, availableCategori
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2">
             <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase">Facility Name</label>
-            <input {...register("name")} className="w-full px-4 py-2 bg-background border border-border rounded-xl text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1" placeholder="Aldora Center" />
+            <Input {...register("name")} className="bg-background" placeholder="Liora Center" />
             {errors.name && <p className="text-xs text-red-600 dark:text-red-400 font-semibold">{errors.name.message}</p>}
           </div>
 
           <div className="space-y-2">
             <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase">URL Slug</label>
-            <input {...register("slug")} className="w-full px-4 py-2 bg-background border border-border rounded-xl text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1" placeholder="aldora-center" />
+            <Input {...register("slug")} className="bg-background" placeholder="liora-center" />
             {errors.slug && <p className="text-xs text-red-600 dark:text-red-400 font-semibold">{errors.slug.message}</p>}
           </div>
 
           <div className="space-y-2 md:col-span-2">
             <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase">Description</label>
-            <textarea {...register("description")} rows={4} className="w-full px-4 py-2 bg-background border border-border rounded-xl text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1" placeholder="Describe the facility..." />
+            <Textarea {...register("description")} rows={4} className="bg-background" placeholder="Describe the facility..." />
             {errors.description && <p className="text-xs text-red-600 dark:text-red-400 font-semibold">{errors.description.message}</p>}
           </div>
         </div>
@@ -189,31 +191,31 @@ export function FacilityForm({ initialData, availableServices, availableCategori
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2 md:col-span-2">
             <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase">Street Address</label>
-            <input {...register("address")} className="w-full px-4 py-2 bg-background border border-border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1" />
+            <Input {...register("address")} className="bg-background" />
             {errors.address && <p className="text-xs text-red-600 dark:text-red-400 font-semibold">{errors.address.message}</p>}
           </div>
           <div className="space-y-2">
             <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase">City</label>
-            <input {...register("city")} className="w-full px-4 py-2 bg-background border border-border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1" />
+            <Input {...register("city")} className="bg-background" />
             {errors.city && <p className="text-xs text-red-600 dark:text-red-400 font-semibold">{errors.city.message}</p>}
           </div>
           <div className="space-y-2">
             <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase">State</label>
-            <input {...register("state")} className="w-full px-4 py-2 bg-background border border-border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1" />
+            <Input {...register("state")} className="bg-background" />
             {errors.state && <p className="text-xs text-red-600 dark:text-red-400 font-semibold">{errors.state.message}</p>}
           </div>
           <div className="space-y-2">
             <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase">Zip Code</label>
-            <input {...register("zipCode")} className="w-full px-4 py-2 bg-background border border-border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1" />
+            <Input {...register("zipCode")} className="bg-background" />
             {errors.zipCode && <p className="text-xs text-red-600 dark:text-red-400 font-semibold">{errors.zipCode.message}</p>}
           </div>
           <div className="space-y-2">
             <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase">Phone</label>
-            <input {...register("phone")} className="w-full px-4 py-2 bg-background border border-border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1" />
+            <Input {...register("phone")} className="bg-background" />
           </div>
           <div className="space-y-2 md:col-span-2">
             <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase">Website URL</label>
-            <input {...register("website")} type="url" className="w-full px-4 py-2 bg-background border border-border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1" />
+            <Input {...register("website")} type="url" className="bg-background" />
           </div>
         </div>
       </div>
@@ -225,39 +227,39 @@ export function FacilityForm({ initialData, availableServices, availableCategori
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2">
             <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase">Minimum Monthly Price ($)</label>
-            <input {...register("priceMin", { valueAsNumber: true })} type="number" className="w-full px-4 py-2 bg-background border border-border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1" />
+            <Input {...register("priceMin", { valueAsNumber: true })} type="number" className="bg-background" />
             {errors.priceMin && <p className="text-xs text-red-600 dark:text-red-400 font-semibold">{errors.priceMin.message}</p>}
           </div>
           <div className="space-y-2">
             <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase">Maximum Monthly Price ($)</label>
-            <input {...register("priceMax", { valueAsNumber: true })} type="number" className="w-full px-4 py-2 bg-background border border-border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1" />
+            <Input {...register("priceMax", { valueAsNumber: true })} type="number" className="bg-background" />
           </div>
           <div className="space-y-2">
             <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase">Total Beds Capacity</label>
-            <input {...register("bedsCount", { valueAsNumber: true })} type="number" className="w-full px-4 py-2 bg-background border border-border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1" />
+            <Input {...register("bedsCount", { valueAsNumber: true })} type="number" className="bg-background" />
           </div>
           <div className="space-y-2">
             <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase">Currently Available Beds</label>
-            <input {...register("bedsAvailable", { valueAsNumber: true })} type="number" className="w-full px-4 py-2 bg-background border border-border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1" />
+            <Input {...register("bedsAvailable", { valueAsNumber: true })} type="number" className="bg-background" />
           </div>
           <div className="space-y-2">
             <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase">Insurance Accepted</label>
-            <input {...register("insuranceAccepted")} className="w-full px-4 py-2 bg-background border border-border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1" />
+            <Input {...register("insuranceAccepted")} className="bg-background" />
           </div>
           <div className="space-y-2">
             <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase">Gender Support</label>
-            <input {...register("genderSupport")} className="w-full px-4 py-2 bg-background border border-border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1" />
+            <Input {...register("genderSupport")} className="bg-background" />
           </div>
           <div className="space-y-2">
             <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase">License Status</label>
-            <input {...register("licenseStatus")} className="w-full px-4 py-2 bg-background border border-border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1" />
+            <Input {...register("licenseStatus")} className="bg-background" />
           </div>
           <div className="space-y-2 flex items-center gap-2 pt-6">
             <input {...register("sameDayAdmission")} type="checkbox" className="h-4 w-4 rounded border-gray-300 text-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2" />
             <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Offers Same-Day Admission</label>
           </div>
         </div>
-
+ 
         {/* Conditions Treated */}
         <div className="space-y-3 pt-4 border-t border-border">
           <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase">Conditions Treated</label>
@@ -271,29 +273,29 @@ export function FacilityForm({ initialData, availableServices, availableCategori
               </span>
             ))}
           </div>
-          <input
+          <Input
             type="text"
             placeholder="Type condition and press Enter..."
             onKeyDown={handleConditionAdd}
-            className="w-full md:max-w-md px-4 py-2 bg-background border border-border rounded-xl text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1"
+            className="w-full md:max-w-md bg-background"
           />
         </div>
       </div>
-
+ 
       {/* Relations & Media */}
       <div className="bg-surface p-6 rounded-2xl border border-border shadow-xs space-y-6">
         <h2 className="text-lg font-bold text-slate-900 border-b border-border pb-2">Media & Relations</h2>
-
+ 
         {/* Images */}
         <div className="space-y-3">
           <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase">Facility Images (URLs)</label>
           {imageFields.map((field, index) => (
             <div key={field.id} className="flex items-center gap-2">
               <ImageIcon className="h-4 w-4 text-slate-400 shrink-0" />
-              <input
+              <Input
                 {...register(`images.${index}` as never)}
                 placeholder="https://example.com/image.jpg"
-                className="flex-1 px-4 py-2 bg-background border border-border rounded-xl text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1"
+                className="flex-1 bg-background"
               />
               <Button type="button" variant="outline" size="icon" onClick={() => removeImage(index)} className="shrink-0 text-destructive hover:bg-destructive/10 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2">
                 <Trash2 className="h-4 w-4" />

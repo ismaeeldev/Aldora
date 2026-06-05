@@ -11,7 +11,6 @@ import {
   ReviewsSection,
   ContactSidebar,
   MiniMap,
-  PricingCard,
 } from "@/components/listing-detail";
 
 export const dynamic = "force-dynamic";
@@ -65,7 +64,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!dbFacility) {
     return {
-      title: "Facility Not Found | Aldora",
+      title: "Facility Not Found | Liora",
     };
   }
 
@@ -201,7 +200,7 @@ export default async function FacilityDetailPage({ params }: PageProps) {
       "@type": "MedicalOrganization",
       name: facility.title,
       description: facility.description,
-      url: `${process.env.NEXT_PUBLIC_APP_URL || "https://aldora.com"}/facility/${facility.slug}`,
+      url: `${process.env.NEXT_PUBLIC_APP_URL || "https://liora.com"}/facility/${facility.slug}`,
       telephone: facility.phone,
       address: {
         "@type": "PostalAddress",
@@ -228,7 +227,7 @@ export default async function FacilityDetailPage({ params }: PageProps) {
         addressRegion: facility.state,
       },
       telephone: facility.phone,
-      url: `${process.env.NEXT_PUBLIC_APP_URL || "https://aldora.com"}/facility/${facility.slug}`,
+      url: `${process.env.NEXT_PUBLIC_APP_URL || "https://liora.com"}/facility/${facility.slug}`,
       geo: {
         "@type": "GeoCoordinates",
         latitude: facility.position[0],
@@ -240,7 +239,7 @@ export default async function FacilityDetailPage({ params }: PageProps) {
       "@context": "https://schema.org",
       "@type": "Organization",
       name: facility.title,
-      url: `${process.env.NEXT_PUBLIC_APP_URL || "https://aldora.com"}/facility/${facility.slug}`,
+      url: `${process.env.NEXT_PUBLIC_APP_URL || "https://liora.com"}/facility/${facility.slug}`,
       contactPoint: {
         "@type": "ContactPoint",
         telephone: facility.phone,
@@ -312,17 +311,9 @@ export default async function FacilityDetailPage({ params }: PageProps) {
           {/* Right Column (Sticky Pricing and Contact Cards, 1/3 width) */}
           <div className="space-y-6">
             <div className="sticky top-20 space-y-6">
-              <PricingCard
-                priceMin={facility.priceMin}
-                priceMax={facility.priceMax}
-                insuranceAccepted={facility.insuranceAccepted}
-                bedsAvailable={facility.bedsAvailable}
-              />
-
               <ContactSidebar
                 facilityId={facility.id}
-                phone={facility.phone || undefined}
-                priceMin={facility.priceMin}
+                bedsAvailable={facility.bedsAvailable}
               />
             </div>
           </div>

@@ -27,7 +27,7 @@ const CATEGORY_MAP: Record<FacilityCategory, { colorClass: string; activeColorCl
     name: "Detox",
   },
   Residential: {
-    colorClass: "bg-blue-600 border-blue-500",
+    colorClass: "bg-primary border-primary",
     activeColorClass: "bg-slate-900 border-white",
     name: "Residential",
   },
@@ -64,8 +64,8 @@ export const MapMarker = memo(function MapMarker({
     const pillText = config.name;
     
     const bgClass = isCurrentlyActive 
-      ? "bg-slate-950 border-white ring-2 ring-slate-950/30 scale-110 z-[1000] shadow-xl" 
-      : `${config.colorClass} shadow-md scale-100 hover:scale-105`;
+      ? "bg-slate-950 border-white ring-2 ring-slate-950/30 scale-[1.08] z-[1000] shadow-xl" 
+      : `${config.colorClass} shadow-md scale-100 hover:scale-[1.08]`;
 
     const htmlString = `
       <div class="flex items-center justify-center transition-all duration-300">
@@ -115,7 +115,7 @@ export const MapMarker = memo(function MapMarker({
             <span className={cn(
               "text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded",
               category === "Detox" && "bg-red-100 text-red-800",
-              category === "Residential" && "bg-blue-100 text-blue-800",
+              category === "Residential" && "bg-primary/10 text-primary",
               category === "Mental Health" && "bg-violet-100 text-violet-800",
               category === "IOP" && "bg-emerald-100 text-emerald-800"
             )}>

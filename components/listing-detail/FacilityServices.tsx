@@ -79,7 +79,7 @@ export function FacilityServices({ services = [] }: FacilityServicesProps) {
     {
       id: "Program Services",
       title: "Program Services",
-      color: "border-blue-100 bg-blue-50/10 text-blue-800",
+      color: "border-primary/20 bg-primary/5 text-primary",
       desc: "Structured rehabilitation workshops and counseling.",
     },
     {

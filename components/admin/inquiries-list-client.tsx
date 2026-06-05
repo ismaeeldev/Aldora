@@ -14,6 +14,7 @@ import {
   Loader2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Dialog,
   DialogContent,
@@ -80,7 +81,7 @@ export function InquiriesListClient({ initialInquiries }: { initialInquiries: In
     switch (status) {
       case "NEW":
         return (
-          <span className="inline-flex items-center gap-1 text-xs font-semibold px-2 py-0.5 bg-blue-50 text-blue-700 border border-blue-100 rounded-full">
+          <span className="inline-flex items-center gap-1 text-xs font-semibold px-2 py-0.5 bg-primary/10 text-primary border border-primary/20 rounded-full">
             <Clock className="h-3 w-3" />
             <span>New</span>
           </span>
@@ -118,11 +119,11 @@ export function InquiriesListClient({ initialInquiries }: { initialInquiries: In
       <div className="bg-surface p-4 rounded-2xl border border-border shadow-xs flex flex-col sm:flex-row gap-4 items-center justify-between">
         <div className="relative w-full sm:max-w-md">
           <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4.5 w-4.5 text-slate-400" />
-          <input
+          <Input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search by sender name, email, or facility..."
-            className="w-full pl-11 pr-4 py-2 bg-muted hover:bg-muted/80 focus:bg-surface text-slate-800 rounded-xl border border-input focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 text-sm transition-all"
+            className="pl-11"
           />
         </div>
         <div className="flex gap-2 w-full sm:w-auto overflow-x-auto self-start sm:self-center">

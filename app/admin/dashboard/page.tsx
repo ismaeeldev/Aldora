@@ -38,7 +38,7 @@ export default async function AdminDashboardPage() {
   const totalOpenBeds = typedFacilities.reduce((sum: number, f: FacilityRow) => sum + f.bedsAvailable, 0);
 
   const STATS = [
-    { label: "Total Facilities", value: facilitiesCount, icon: Activity, color: "text-blue-600 bg-blue-50 border-blue-100" },
+    { label: "Total Facilities", value: facilitiesCount, icon: Activity, color: "text-primary bg-primary/10 border-primary/20" },
     { label: "Open Beds Capacity", value: totalOpenBeds, icon: ShieldCheck, color: "text-emerald-600 bg-emerald-50 border-emerald-100" },
     { label: "Patient Reviews", value: reviewsCount, icon: Award, color: "text-violet-600 bg-violet-50 border-violet-100" },
     { label: "Pending Inquiries", value: inquiriesCount, icon: MessageSquare, color: "text-amber-600 bg-amber-50 border-amber-100" },
@@ -56,13 +56,6 @@ export default async function AdminDashboardPage() {
             Welcome back to your administrator dashboard. Review live metrics and moderate content updates.
           </p>
         </div>
-        <Link 
-          href="/listings"
-          className="inline-flex items-center justify-center h-10 px-5 bg-primary hover:bg-primary-hover text-white rounded-xl font-medium shadow-md shadow-primary/10 transition-all hover:scale-[1.01] text-sm"
-        >
-          <Plus className="h-4 w-4 mr-1.5 shrink-0" />
-          <span>Search Directory</span>
-        </Link>
       </div>
 
       {/* Stats Grid */}

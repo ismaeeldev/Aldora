@@ -1,15 +1,17 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Heart, MapPin, Bed, DollarSign } from "lucide-react";
+import { Heart, MapPin, Clock } from "lucide-react";
 import { ReviewStars } from "@/components/shared/review-stars";
-import { ListingTag } from "@/components/shared/badges";
 import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { useMapStore } from "@/lib/store/map-store";
+import { useFavoritesStore } from "@/lib/store/favorites-store";
 import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 export interface ListingCardProps {
   id: string;
@@ -28,6 +30,7 @@ export interface ListingCardProps {
   state: string;
   isFeatured?: boolean;
   position?: [number, number];
+  variant?: "vertical" | "horizontal";
 }
 
 export function ListingCard({
@@ -44,14 +47,18 @@ export function ListingCard({
   distance,
   city,
   state,
-  isFeatured = false,
   position,
   slug,
+  variant = "horizontal",
 }: ListingCardProps) {
   const router = useRouter();
-  const [isSaved, setIsSaved] = useState(false);
+  
+  // Hydration safe favorites
+  const [isHydrated, setIsHydrated] = useState(false);
+  useEffect(() => setIsHydrated(true), []);
+  const { isFavorite, toggleFavorite } = useFavoritesStore();
+  const isSaved = isHydrated ? isFavorite(id) : false;
 
-  // Hook into Zustand map store
   const { 
     selectedFacilityId, 
     setSelectedFacilityId,
@@ -62,191 +69,166 @@ export function ListingCard({
   } = useMapStore();
 
   const isSelected = selectedFacilityId === id;
-
-  const formatPrice = (price: number) => {
-    return price.toLocaleString("en-US", {
-      maximumFractionDigits: 0,
-    });
-  };
+  const isHorizontal = variant === "horizontal";
 
   const handleCardClick = () => {
     setSelectedFacilityId(id);
     setActiveMarkerId(id);
     if (position) {
       setMapCenter(position);
-      setMapZoom(12); // Zillow-style zoom in on click
+      setMapZoom(12);
     }
-    // Navigate to details page when the card is clicked
-    router.push(`/facility/${slug || id}`);
   };
 
+  const careType = categories[0] || "Treatment Center";
+  
   return (
     <motion.article
       whileHover={{ y: -4 }}
-      transition={{ duration: 0.2, ease: "easeInOut" }}
-      className="h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-xl"
+      transition={{ duration: 0.2 }}
+      className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-2xl h-full"
       onMouseEnter={() => setHoveredFacilityId(id)}
       onMouseLeave={() => setHoveredFacilityId(null)}
       onClick={handleCardClick}
       role="button"
       tabIndex={0}
-      aria-label={`View map location for ${title}`}
-      onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          handleCardClick();
-        }
-      }}
     >
-      <Card className={`group relative h-full flex flex-col overflow-hidden bg-surface border py-0 transition-all duration-300 cursor-pointer ${
-        isSelected 
-          ? "border-primary ring-2 ring-primary ring-offset-1 shadow-md scale-[1.01]" 
-          : "border-border shadow-sm hover:shadow-xl hover:-translate-y-1.5"
-      }`}>
+      <Card className={cn(
+        "group relative overflow-hidden bg-surface transition-all duration-300 cursor-pointer rounded-2xl border border-border shadow-xs hover:shadow-xl hover:border-primary/30 hover:shadow-primary/5 p-0 h-full",
+        isSelected && "border-primary ring-1 ring-primary shadow-md shadow-primary/5",
+        isHorizontal ? "flex flex-col sm:flex-row" : "flex flex-col"
+      )}>
         
-        {/* Card Image Container */}
-        <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-900 shadow-[inset_0_-20px_40px_rgb(0,0,0,0.4)]">
+        {/* 1. Image */}
+        <div className={cn(
+          "relative overflow-hidden bg-slate-100 shrink-0",
+          isHorizontal ? "h-48 sm:h-auto sm:w-[35%] lg:w-[30%]" : "h-44 w-full"
+        )}>
           <Image
             src={imageUrl}
             alt={title}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            className="object-cover object-center transition-transform duration-500 ease-out group-hover:scale-105"
-            priority={isFeatured}
+            className="object-cover object-center transition-transform duration-500 ease-out group-hover:scale-[1.03]"
           />
-          
-          {/* Overlay gradient */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/10 pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-transparent pointer-events-none" />
 
-          {/* Badges */}
-          <div className="absolute top-3 left-3 flex flex-col gap-1 z-10">
-            {isFeatured && (
-              <span className="px-2 py-0.5 text-[9px] font-extrabold tracking-wider uppercase bg-slate-900 text-white rounded shadow-sm border border-white/10">
-                Featured
-              </span>
-            )}
-            <ListingTag status={bedsAvailable > 0 ? "success" : "warning"} className="w-fit text-[9px] px-1.5 py-0.5 font-semibold">
-              {bedsAvailable > 0 ? "Beds Available" : "Waitlist Only"}
-            </ListingTag>
-          </div>
-
-          {/* Save Button */}
-          <button
-            type="button"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation(); // Avoid card selection trigger
-              setIsSaved(!isSaved);
-            }}
-            className="absolute top-3 right-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-surface/90 backdrop-blur-xs border border-border/50 text-slate-700 shadow-sm hover:bg-surface hover:text-rose-500 hover:scale-105 active:scale-95 transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 focus-visible:outline-none"
-            aria-label={isSaved ? `Unsave ${title}` : `Save ${title}`}
-            aria-pressed={isSaved}
-          >
-            <motion.div
-              animate={{ scale: isSaved ? [1, 1.25, 1] : 1 }}
-              transition={{ duration: 0.3 }}
+          {/* Floating action buttons on top of image */}
+          <div className="absolute inset-x-3 top-3 flex items-center justify-end z-10 select-none">
+            <button 
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                toggleFavorite(id);
+              }}
+              className="flex items-center justify-center h-7 w-7 rounded-full bg-white/90 hover:bg-white text-slate-600 hover:text-rose-500 transition-all shadow-sm cursor-pointer focus-visible:outline-none"
+              aria-label="Save community"
             >
-              <Heart
-                className={`h-4.5 w-4.5 transition-colors ${
-                  isSaved ? "fill-rose-500 text-rose-500" : "text-slate-600"
-                }`}
-              />
-            </motion.div>
-          </button>
+              <Heart className={cn("h-3.5 w-3.5 transition-colors", isSaved ? "fill-rose-500 text-rose-500" : "text-slate-500")} />
+            </button>
+          </div>
         </div>
 
         {/* Card Content Details */}
-        <CardContent className="flex flex-col flex-1 p-3.5">
-          {/* Location & Distance */}
-          <div className="flex items-center justify-between gap-2 text-slate-500 text-[11px] mb-1.5">
-            <span className="flex items-center gap-1 font-medium">
-              <MapPin className="h-3 w-3 shrink-0 text-slate-400" />
-              <span className="truncate">{city}, {state}</span>
-            </span>
-            {distance !== undefined && (
-              <span className="shrink-0 font-medium bg-muted px-2 py-0.5 rounded-full text-slate-600">
-                {distance.toFixed(1)} mi
-              </span>
-            )}
-          </div>
-
-          {/* Title */}
-          <div className="flex items-start justify-between gap-2 mb-1">
+        <CardContent className={cn(
+          "flex flex-col flex-1 p-4 gap-1.5",
+          isHorizontal && "sm:p-5 sm:gap-2 justify-center"
+        )}>
+          
+          {/* Header Row: Title & Rating */}
+          <div className="flex items-start justify-between gap-3">
             <Link 
               href={`/facility/${slug || id}`}
-              className="flex-1 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              className="block group-hover:text-primary transition-colors flex-1 min-w-0"
               onClick={(e) => e.stopPropagation()}
             >
-              <h3 className="text-sm md:text-base font-bold text-slate-900 leading-tight group-hover:text-primary transition-colors line-clamp-1">
+              <h3 className={cn(
+                "font-extrabold text-sky-850 leading-tight truncate",
+                isHorizontal ? "text-base md:text-lg" : "text-sm md:text-base"
+              )}>
                 {title}
               </h3>
             </Link>
-            <Link 
-              href={`/facility/${slug || id}`}
-              className="text-[10px] font-bold text-primary shrink-0 transition-colors self-center flex items-center gap-0.5 hover:underline rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-              onClick={(e) => e.stopPropagation()}
-              aria-label={`View details for ${title}`}
-            >
-              <span>Details</span>
-              <span aria-hidden="true">&rarr;</span>
-            </Link>
+            
+            <div className="flex items-center shrink-0 text-amber-500 gap-0.5">
+              <ReviewStars rating={rating} reviewCount={reviewCount} showText={false} />
+              <span className="text-xs font-bold text-slate-800 ml-1">{rating.toFixed(1)}</span>
+              <span className="text-[10px] text-slate-400 font-medium">({reviewCount})</span>
+            </div>
           </div>
 
-          {/* Reviews */}
-          <div className="mb-1.5">
-            <ReviewStars
-              rating={rating}
-              reviewCount={reviewCount}
-              showText
-              className="text-[11px]"
-            />
+          {/* Subtitle / Categories */}
+          <div className="text-[11px] font-bold text-slate-550 uppercase tracking-wide">
+            {careType} • {city}, {state}
           </div>
 
-          {/* Insurance Accepted */}
-          <div className="flex items-center gap-1 text-[11px] text-teal-700 font-semibold mb-2">
-            <svg className="h-3 w-3 shrink-0 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-            </svg>
-            <span className="truncate">{insuranceAccepted}</span>
+          {/* Features Grid */}
+          <div className={cn(
+            "grid gap-3 text-[11px] text-slate-600 border-t border-border/80 pt-2.5 mt-1 select-none",
+            isHorizontal ? "grid-cols-2" : "grid-cols-2"
+          )}>
+            {/* Left Column: Core Features */}
+            <div className="space-y-1.5 min-w-0">
+              <div className="flex items-center gap-1.5 text-slate-700">
+                <span className="h-1.5 w-1.5 rounded-full bg-primary/70 shrink-0" />
+                <span className="truncate">{insuranceAccepted}</span>
+              </div>
+              <div className="flex items-center gap-1.5 text-slate-700">
+                <span className="h-1.5 w-1.5 rounded-full bg-primary/70 shrink-0" />
+                <span className="truncate">Same-day admission</span>
+              </div>
+              <div className="flex items-center gap-1.5 text-slate-700">
+                <span className="h-1.5 w-1.5 rounded-full bg-primary/70 shrink-0" />
+                <span className="truncate">Male / Female / Co-ed</span>
+              </div>
+            </div>
+
+            {/* Right Column: Dynamic Status Indicators */}
+            <div className="space-y-1.5 min-w-0">
+              <div className="flex items-center gap-1.5 font-bold text-emerald-600">
+                <span className="relative flex h-2 w-2 shrink-0">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                </span>
+                <span className="truncate">Beds Available: {bedsAvailable}</span>
+              </div>
+              
+              <div className="flex items-center gap-1.5 text-slate-500">
+                <Clock className="h-3.5 w-3.5 text-slate-400 shrink-0" />
+                <span className="truncate">Response: &lt; 1 hour</span>
+              </div>
+              
+              {distance !== undefined && (
+                <div className="flex items-center gap-1.5 text-slate-500">
+                  <MapPin className="h-3.5 w-3.5 text-slate-400 shrink-0" />
+                  <span className="truncate">Distance: {distance.toFixed(1)} mi</span>
+                </div>
+              )}
+            </div>
           </div>
 
-          {/* Category Chips */}
-          <div className="flex flex-wrap gap-1 mb-3">
-            {categories.slice(0, 2).map((cat) => (
-              <span
-                key={cat}
-                className="px-1.5 py-0.5 text-[9px] bg-secondary/60 text-secondary-foreground rounded font-medium border border-teal-100/40"
-              >
-                {cat}
-              </span>
-            ))}
-          </div>
-
-          {/* Bed availability & Pricing */}
-          <div className="mt-auto pt-2.5 border-t border-border/80 flex items-center justify-between gap-4">
-            <div className="flex items-center gap-1 text-slate-600">
-              <Bed className="h-4 w-4 text-slate-400" aria-hidden="true" />
-              <span className="text-xs">
-                <strong className="font-bold text-slate-800">
-                  {bedsAvailable}
-                </strong>{" "}
-                bed{bedsAvailable !== 1 && "s"} open
-              </span>
+          {/* Footer Row: Pricing & Actions */}
+          <div className="flex items-center justify-between border-t border-border/80 pt-2.5 mt-auto">
+            <div className="text-[11px] font-bold text-slate-500">
+              Private pay range: <span className="text-slate-900">${priceMin} - ${priceMax || 600}/Week</span>
             </div>
             
-            <div className="text-right">
-              <span className="text-[9px] uppercase font-semibold text-slate-400 block tracking-wider leading-none" aria-hidden="true">
-                Est. Cost
-              </span>
-              <span className="text-xs md:text-sm font-bold text-slate-900 flex items-center justify-end" aria-label={`Estimated cost from ${formatPrice(priceMin)}`}>
-                <DollarSign className="h-3.5 w-3.5 -mr-0.5 text-slate-600" aria-hidden="true" />
-                {formatPrice(priceMin)}
-                {priceMax && ` - $${formatPrice(priceMax)}`}
-              </span>
-            </div>
+            <Button 
+              size="sm" 
+              className="h-8 text-[10px] font-bold uppercase tracking-wider py-0 px-3 bg-primary text-white hover:bg-primary-hover rounded-md shadow-sm border-none cursor-pointer"
+              onClick={(e) => {
+                e.stopPropagation();
+                router.push(`/facility/${slug || id}`);
+              }}
+            >
+              Check Availability
+            </Button>
           </div>
+
         </CardContent>
       </Card>
     </motion.article>
   );
 }
+

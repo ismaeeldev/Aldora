@@ -4,15 +4,10 @@ import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, Search, X, User } from "lucide-react";
+import { Menu, X, Search, ChevronDown, Heart } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-
-const NAV_LINKS = [
-  { name: "Home", href: "/" },
-  { name: "Directory", href: "/listings" },
-  { name: "Featured Facility", href: "/facility/demo-facility" },
-];
+import Image from "next/image";
 
 export function Navbar() {
   const pathname = usePathname();
@@ -49,62 +44,80 @@ export function Navbar() {
     <>
       <header
         className={cn(
-          "fixed top-0 left-0 right-0 z-50 h-16 w-full transition-all duration-300 ease-in-out border-b",
-          isScrolled
-            ? "bg-surface/80 backdrop-blur-md border-border shadow-sm"
-            : "bg-surface border-transparent"
+          "fixed top-0 left-0 right-0 z-50 h-16 w-full transition-all duration-300 ease-in-out border-b bg-gradient-to-r from-cyan-50/90 via-white/90 to-sky-50/90 backdrop-blur-md border-border/50 shadow-sm"
         )}
       >
         <div className="mx-auto flex h-full w-full max-w-7xl items-center justify-between px-4 md:px-8">
           
-          {/* Left: Logo */}
-          <div className="flex flex-1 items-center justify-start">
-            <Link href="/" className="flex items-center gap-2 group" aria-label="Home">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-tr from-cyan-500 to-primary text-primary-foreground shadow-md shadow-primary/20 transition-transform group-hover:scale-105">
-                <svg className="w-5 h-5 fill-none stroke-current" viewBox="0 0 24 24" strokeWidth="2.5">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 3L3 20h4l3-6h4l3 6h4L12 3zm-1 8h2" />
-                </svg>
+          {/* Left Side: Navigation Links */}
+          <div className="flex flex-1 items-center justify-start gap-6">
+            <Link 
+              href="/listings"
+              className="flex items-center gap-1.5 text-sm font-semibold text-slate-700 hover:text-primary transition-colors cursor-pointer"
+            >
+              <span>Find Housing</span>
+              <Search className="h-4 w-4 text-slate-500" />
+            </Link>
+            
+            <div className="relative group hidden md:block">
+              <button className="flex items-center gap-1 text-sm font-semibold text-slate-700 hover:text-primary transition-colors cursor-pointer focus:outline-none">
+                <span>Care Options</span>
+                <ChevronDown className="h-4 w-4 text-slate-500" />
+              </button>
+              
+              {/* Dropdown Menu matching Screenshot 2 */}
+              <div className="absolute top-full left-0 mt-2 w-56 rounded-xl border border-border bg-surface shadow-xl py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                {[
+                  { name: "Detox (Medical Detox)", val: "detox" },
+                  { name: "Residential Treatment", val: "inpatient" },
+                  { name: "PHP (Partial Hospitalization)", val: "outpatient" },
+                  { name: "IOP (Intensive Outpatient)", val: "outpatient" },
+                  { name: "Mental Health Treatment", val: "therapy" },
+                  { name: "Dual Diagnosis", val: "therapy" },
+                  { name: "Sober Living", val: "telehealth" }
+                ].map((item) => (
+                  <Link
+                    key={item.name}
+                    href={`/listings?treatmentType=${item.val}`}
+                    className="block px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-muted transition-colors"
+                  >
+                    {item.name}
+                  </Link>
+                ))}
               </div>
-              <span className="text-xl font-extrabold tracking-wide text-slate-950 hidden sm:block">
-                Aldora
-              </span>
+            </div>
+          </div>
+
+          {/* Center: Brand Logo */}
+          <div className="flex flex-none items-center justify-center">
+            <Link href="/" aria-label="Home" className="flex items-center">
+              <Image 
+                src="/Liora-Logo.png" 
+                alt="Liora Logo" 
+                width={120} 
+                height={36} 
+                className="object-contain" 
+                style={{ width: "auto", height: "auto" }}
+                priority
+              />
             </Link>
           </div>
 
-          {/* Center: Desktop Nav Links */}
-          <nav className="hidden lg:flex flex-none items-center gap-1.5">
-            {NAV_LINKS.map((link) => {
-              const isActive = pathname === link.href;
-              return (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  className={cn(
-                    "px-3.5 py-2 text-sm font-medium rounded-lg transition-all duration-200",
-                    isActive
-                      ? "text-primary bg-primary/5 font-semibold"
-                      : "text-slate-600 hover:text-slate-900 hover:bg-muted"
-                  )}
-                >
-                  {link.name}
-                </Link>
-              );
-            })}
-          </nav>
-
-          {/* Right: Actions */}
-          <div className="flex flex-1 items-center justify-end gap-2 md:gap-4">
-            <Link 
-              href="/admin/login"
-              className="inline-flex items-center justify-center rounded-lg bg-primary hover:bg-primary/90 text-primary-foreground text-sm font-medium px-4 py-2 transition-colors shadow-sm"
-            >
-              <User className="h-4 w-4 mr-2" />
-              <span>Admin Access</span>
-            </Link>
+          {/* Right Side: Actions */}
+          <div className="flex flex-1 items-center justify-end gap-4">
+            <div className="hidden lg:flex items-center gap-6">
+              <Link 
+                href="/favorites"
+                className="flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-rose-500 transition-colors"
+              >
+                <Heart className="h-4 w-4" />
+                Saved
+              </Link>
+            </div>
 
             {/* Mobile Menu Toggle */}
             <button
-              className="flex lg:hidden p-2 text-slate-600 hover:bg-muted rounded-lg transition-colors ml-1"
+              className="flex lg:hidden p-2 text-slate-600 hover:bg-muted rounded-lg transition-colors"
               onClick={() => setIsMobileMenuOpen(true)}
               aria-label="Open mobile menu"
             >
@@ -144,38 +157,23 @@ export function Navbar() {
               </div>
 
               <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-2">
-
-
                 {/* Mobile Links */}
-                <div className="flex flex-col gap-1.5">
-                  {NAV_LINKS.map((link) => {
-                    const isActive = pathname === link.href;
-                    return (
-                      <Link
-                        key={link.name}
-                        href={link.href}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                        className={cn(
-                          "px-4 py-3 text-base font-medium rounded-lg transition-all duration-200",
-                          isActive
-                            ? "text-primary bg-primary/5 font-semibold"
-                            : "text-slate-700 hover:bg-muted hover:text-slate-900"
-                        )}
-                      >
-                        {link.name}
-                      </Link>
-                    );
-                  })}
-                </div>
-                
-                <div className="mt-4 pt-4 border-t border-border flex flex-col gap-2">
+                <div className="flex flex-col gap-3">
                   <Link
-                    href="/admin/login"
+                    href="/listings"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="flex w-full items-center justify-center rounded-lg bg-primary text-primary-foreground h-12 font-medium text-sm transition-colors hover:bg-primary/90"
+                    className="flex items-center gap-2 px-4 py-3 text-base font-medium text-slate-700 hover:bg-muted rounded-lg transition-colors"
                   >
-                    <User className="h-4 w-4 mr-2" />
-                    <span>Admin Access</span>
+                    <Search className="h-5 w-5" />
+                    Find Housing
+                  </Link>
+                  <Link
+                    href="/favorites"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="flex items-center gap-2 px-4 py-3 text-base font-medium text-slate-700 hover:bg-rose-50 hover:text-rose-600 rounded-lg transition-colors"
+                  >
+                    <Heart className="h-5 w-5" />
+                    Saved Facilities
                   </Link>
                 </div>
               </div>

@@ -43,7 +43,7 @@ export default function AdminLoginPage() {
             <ShieldCheck className="h-6 w-6" />
           </div>
           <h1 className="text-2xl font-bold tracking-wide text-slate-900">
-            Aldora Admin Access
+            Liora Admin Access
           </h1>
           <p className="text-sm text-slate-500">
             Sign in to manage facilities, review directories, and moderate feedback.
@@ -70,7 +70,7 @@ export default function AdminLoginPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@aldora.com"
+                placeholder="admin@liora.com"
                 className="w-full pl-11 pr-4 py-2.5 bg-background text-slate-800 rounded-xl border border-input focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 text-sm"
               />
             </div>

@@ -1,6 +1,7 @@
 import React from "react";
 import { prisma } from "@/lib/db/prisma";
 import Link from "next/link";
+import Image from "next/image";
 import { FacilityActions } from "@/components/admin/facility-actions";
 import { Button } from "@/components/ui/button";
 import { 
@@ -115,11 +116,12 @@ export default async function AdminFacilitiesPage({
                 {/* Image Preview */}
                 <div className="w-full lg:w-36 h-24 rounded-xl bg-slate-100 overflow-hidden relative shrink-0 border border-slate-100">
                   {facility.images.length > 0 ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img 
+                    <Image 
                       src={facility.images[0].url} 
                       alt={facility.name} 
-                      className="w-full h-full object-cover"
+                      fill
+                      sizes="(max-width: 1024px) 100vw, 144px"
+                      className="object-cover"
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-slate-400">

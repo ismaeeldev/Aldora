@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { 
   LayoutDashboard, 
@@ -95,16 +96,17 @@ export default function AdminDashboardLayout({
       {/* Desktop Sidebar (Left side, fixed width) */}
       <aside className="hidden md:flex flex-col w-64 bg-surface border-r border-border fixed inset-y-0 left-0 z-20">
         {/* Brand header */}
-        <div className="h-16 px-6 border-b border-border flex items-center gap-2.5 shrink-0">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-tr from-cyan-500 to-primary text-primary-foreground shadow-md shadow-primary/20">
-            <svg className="w-5 h-5 fill-none stroke-current" viewBox="0 0 24 24" strokeWidth="2.5">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 3L3 20h4l3-6h4l3 6h4L12 3zm-1 8h2" />
-            </svg>
-          </div>
-          <div className="flex flex-col">
-            <span className="text-sm font-bold tracking-wide text-slate-900 leading-none">Aldora Console</span>
-            <span className="text-[10px] text-primary font-semibold tracking-wider uppercase mt-0.5">Administrator</span>
-          </div>
+        <div className="h-16 px-6 border-b border-border flex items-center gap-3 shrink-0">
+          <Image 
+            src="/Liora-Logo.png" 
+            alt="Liora Logo" 
+            width={100} 
+            height={30} 
+            className="object-contain" 
+            style={{ width: "auto", height: "auto" }}
+            priority
+          />
+          <span className="text-[10px] bg-primary/10 text-primary font-bold px-1.5 py-0.5 rounded uppercase">Console</span>
         </div>
 
         {/* Sidebar Nav */}
@@ -127,15 +129,17 @@ export default function AdminDashboardLayout({
 
       {/* Mobile Top Header (top, fixed height) */}
       <header className="md:hidden sticky top-0 z-20 w-full bg-surface border-b border-border h-16 flex items-center justify-between px-4 shadow-xs shrink-0">
-        <div className="flex items-center gap-2">
-          <div className="flex h-8.5 w-8.5 items-center justify-center rounded-xl bg-gradient-to-tr from-cyan-500 to-primary text-primary-foreground shadow-md shadow-primary/10">
-            <svg className="w-4.5 h-4.5 fill-none stroke-current" viewBox="0 0 24 24" strokeWidth="2.5">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 3L3 20h4l3-6h4l3 6h4L12 3zm-1 8h2" />
-            </svg>
-          </div>
-          <span className="text-sm font-bold tracking-wide text-slate-900">
-            Aldora Admin
-          </span>
+        <div className="flex items-center gap-3">
+          <Image 
+            src="/Liora-Logo.png" 
+            alt="Liora Logo" 
+            width={85} 
+            height={26} 
+            className="object-contain" 
+            style={{ width: "auto", height: "auto" }}
+            priority
+          />
+          <span className="text-[9px] bg-primary/10 text-primary font-bold px-1.5 py-0.5 rounded uppercase">Admin</span>
         </div>
 
         <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
@@ -152,16 +156,17 @@ export default function AdminDashboardLayout({
             }
           />
           <SheetContent side="left" className="p-0 flex flex-col h-full w-72">
-            <SheetHeader className="h-16 px-6 border-b border-border flex flex-row items-center gap-2.5 shrink-0 space-y-0">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-tr from-cyan-500 to-primary text-primary-foreground shadow-md shadow-primary/20">
-                <svg className="w-5 h-5 fill-none stroke-current" viewBox="0 0 24 24" strokeWidth="2.5">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 3L3 20h4l3-6h4l3 6h4L12 3zm-1 8h2" />
-                </svg>
-              </div>
-              <div>
-                <SheetTitle className="text-sm font-bold tracking-wide text-slate-900 leading-none">Aldora Console</SheetTitle>
-                <SheetDescription className="text-[10px] text-slate-400 mt-0.5">Admin Navigation Portal</SheetDescription>
-              </div>
+            <SheetHeader className="h-16 px-6 border-b border-border flex flex-row items-center gap-3 shrink-0 space-y-0">
+              <Image 
+                src="/Liora-Logo.png" 
+                alt="Liora Logo" 
+                width={85} 
+                height={26} 
+                className="object-contain" 
+                style={{ width: "auto", height: "auto" }}
+                priority
+              />
+              <span className="text-[9px] bg-primary/10 text-primary font-bold px-1.5 py-0.5 rounded uppercase">Console</span>
             </SheetHeader>
             <div className="flex-1 overflow-y-auto">
               {renderNavigationLinks(() => setMobileOpen(false))}

@@ -38,7 +38,7 @@ export function FacilityInfo({
       icon: Bed,
       label: "Beds Capacity",
       value: `${bedsCount} Total Beds (${bedsAvailable} Open)`,
-      colorClass: "bg-blue-50 text-blue-700 border-blue-100",
+      colorClass: "bg-primary/10 text-primary border-primary/20",
     },
     {
       icon: ShieldCheck,

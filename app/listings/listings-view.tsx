@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import { FilterBar } from "@/components/home/filter-bar";
 import { ListingCard } from "@/components/listings";
 import { MapWrapper } from "@/components/map/MapWrapper";
@@ -65,6 +66,41 @@ export function ListingsView({ initialFacilities }: ListingsViewProps) {
     }
   };
 
+  // Memoize listing cards to prevent heavy re-renders when map selection or mobileView state toggles
+  const renderedListings = React.useMemo(() => {
+    return initialFacilities.map((facility) => {
+      return (
+        <motion.div
+          key={facility.id}
+          id={`listing-card-${facility.id}`}
+          variants={{
+            hidden: { opacity: 0, y: 20 },
+            show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } }
+          }}
+        >
+          <ListingCard
+            id={facility.id}
+            title={facility.title}
+            imageUrl={facility.imageUrl}
+            categories={facility.categories}
+            insuranceAccepted={facility.insuranceAccepted}
+            rating={facility.rating}
+            reviewCount={facility.reviewCount}
+            priceMin={facility.priceMin}
+            priceMax={facility.priceMax || undefined}
+            slug={facility.slug}
+            bedsAvailable={facility.bedsAvailable}
+            distance={facility.distance}
+            city={facility.city}
+            state={facility.state}
+            isFeatured={facility.category === "Residential" || facility.category === "Detox"}
+            position={facility.position}
+          />
+        </motion.div>
+      );
+    });
+  }, [initialFacilities]);
+
   return (
     <div className="flex flex-col min-h-screen bg-background">
       {/* Sticky Filters bar */}
@@ -84,41 +120,40 @@ export function ListingsView({ initialFacilities }: ListingsViewProps) {
             <h1 className="text-xl md:text-2xl font-semibold text-slate-900 tracking-tight">
               Behavioral Health Programs Nationwide
             </h1>
-            <p className="text-slate-500 text-sm mt-1">
+            <p className="text-slate-500 text-sm mt-4">
               Showing {initialFacilities.length} certified facilities matching your criteria.
             </p>
           </div>
 
-          {/* Cards Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-20">
-            {initialFacilities.map((facility) => {
-              return (
-                <div
-                  key={facility.id}
-                  id={`listing-card-${facility.id}`}
-                >
-                  <ListingCard
-                    id={facility.id}
-                    title={facility.title}
-                    imageUrl={facility.imageUrl}
-                    categories={facility.categories}
-                    insuranceAccepted={facility.insuranceAccepted}
-                    rating={facility.rating}
-                    reviewCount={facility.reviewCount}
-                    priceMin={facility.priceMin}
-                    priceMax={facility.priceMax || undefined}
-                    slug={facility.slug}
-                    bedsAvailable={facility.bedsAvailable}
-                    distance={facility.distance}
-                    city={facility.city}
-                    state={facility.state}
-                    isFeatured={facility.category === "Residential" || facility.category === "Detox"}
-                    position={facility.position}
-                  />
-                </div>
-              );
-            })}
-          </div>
+          {/* Cards Grid / Empty State */}
+          {initialFacilities.length === 0 ? (
+            <div className="flex flex-col items-center justify-center text-center py-20 px-4">
+              <div className="h-16 w-16 bg-muted rounded-full flex items-center justify-center mb-4">
+                <svg className="h-8 w-8 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-bold text-slate-900">No facilities found</h3>
+              <p className="text-slate-500 mt-2 max-w-sm">
+                We couldn't find any facilities matching your current search criteria. Try adjusting your filters or location.
+              </p>
+            </div>
+          ) : (
+            <motion.div 
+              initial="hidden"
+              animate="show"
+              variants={{
+                hidden: { opacity: 0 },
+                show: {
+                  opacity: 1,
+                  transition: { staggerChildren: 0.08 }
+                }
+              }}
+              className="flex flex-col gap-4 pb-20"
+            >
+              {renderedListings}
+            </motion.div>
+          )}
         </div>
 
         {/* Right Side: Sticky map container (45% width on desktop) */}

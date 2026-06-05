@@ -41,7 +41,7 @@ export interface SendMailOptions {
  */
 export async function sendMail(options: SendMailOptions): Promise<{ success: boolean; messageId?: string; error?: string }> {
   try {
-    const defaultFrom = SMTP_FROM || '"Aldora Platform" <noreply@aldora.com>';
+    const defaultFrom = SMTP_FROM || '"Liora Platform" <noreply@liora.com>';
     
     const info = await transporter.sendMail({
       from: defaultFrom,

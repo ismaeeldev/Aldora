@@ -84,20 +84,27 @@ export function Hero() {
 
   return (
     <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden py-24 md:py-32">
-      {/* Background Imagery */}
-      <motion.div 
-        initial={{ scale: 1 }}
-        animate={{ scale: 1.05 }}
-        transition={{ duration: 20, ease: "linear", repeat: Infinity, repeatType: "reverse" }}
-        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat bg-slate-900"
-        style={{
-          backgroundImage: `url('/images/wellness_hero_bg.png')`,
-        }}
-      >
-        {/* Layered calming overlays for maximum contrast & premium medical feeling */}
-        <div className="absolute inset-0 bg-gradient-to-r from-slate-950/80 via-slate-900/60 to-slate-950/80" />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-slate-950/40" />
-      </motion.div>
+      {/* Background Gradient & Grid */}
+      <div className="absolute inset-0 z-0 bg-gradient-to-tr from-cyan-50/40 via-slate-50/50 to-sky-100/40 overflow-hidden">
+        {/* Animated glowing blobs */}
+        <motion.div
+          animate={{ y: [0, -30, 0], x: [0, 20, 0], scale: [1, 1.05, 1] }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-[-10%] left-[15%] w-[500px] h-[500px] rounded-full bg-primary/15 blur-[100px] pointer-events-none"
+        />
+        <motion.div
+          animate={{ y: [0, 40, 0], x: [0, -30, 0], scale: [1, 1.1, 1] }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+          className="absolute bottom-[-10%] right-[15%] w-[450px] h-[450px] rounded-full bg-teal-200/30 blur-[90px] pointer-events-none"
+        />
+        <motion.div
+          animate={{ y: [0, -20, 0], x: [0, -20, 0], scale: [1, 1.05, 1] }}
+          transition={{ duration: 9, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+          className="absolute top-[30%] right-[20%] w-[300px] h-[300px] rounded-full bg-sky-300/20 blur-[80px] pointer-events-none"
+        />
+        {/* Subtle grid pattern overlay */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#23b5e808_1px,transparent_1px),linear-gradient(to_bottom,#23b5e808_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)]" />
+      </div>
 
       {/* Hero Content Container */}
       <motion.div 
@@ -112,9 +119,9 @@ export function Hero() {
           initial={{ opacity: 0, y: -15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="inline-flex items-center gap-1.5 px-3.5 py-1.5 mb-6 rounded-full bg-secondary/20 backdrop-blur-md border border-secondary/35 text-secondary-foreground text-xs md:text-sm font-semibold tracking-wide uppercase"
+          className="inline-flex items-center gap-1.5 px-3.5 py-1.5 mb-6 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs md:text-sm font-bold tracking-wide uppercase shadow-sm"
         >
-          <Sparkles className="h-4 w-4 text-emerald-500 animate-pulse" />
+          <Sparkles className="h-4 w-4 animate-pulse" />
           <span>Premier Behavioral Health Directory</span>
         </motion.div>
 
@@ -123,10 +130,10 @@ export function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.1 }}
-          className="text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tighter text-white max-w-3xl leading-[1.1]"
+          className="text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tighter text-slate-900 max-w-3xl leading-[1.1]"
         >
           Find Healing. <br className="sm:hidden" />
-          <span className="bg-gradient-to-r from-teal-200 via-white to-teal-100 bg-clip-text text-transparent drop-shadow-sm">
+          <span className="text-primary drop-shadow-sm">
             Discover Trusted Care.
           </span>
         </motion.h1>
@@ -136,7 +143,7 @@ export function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="mt-4 text-base md:text-xl text-slate-200 max-w-2xl font-light leading-relaxed"
+          className="mt-4 text-base md:text-xl text-slate-600 max-w-2xl font-medium leading-relaxed"
         >
           Compare verified treatment facilities, luxury recovery programs, and dedicated rehab specialists near you.
         </motion.p>
@@ -149,7 +156,7 @@ export function Hero() {
           className="w-full max-w-4xl mt-10"
         >
           {/* Tabs Navigation (Horizontal scrolling on small screens) */}
-          <div className="flex items-center gap-1 overflow-x-auto no-scrollbar px-1 mb-2 bg-slate-950/40 backdrop-blur-md p-1 rounded-t-xl max-w-fit mx-auto border-t border-x border-slate-700/50">
+          <div className="flex items-center gap-1 overflow-x-auto no-scrollbar px-1 mb-2 bg-surface/80 backdrop-blur-md p-1 rounded-t-xl max-w-fit mx-auto border border-border shadow-sm">
             {TABS.map((tab) => (
               <button
                 key={tab.id}
@@ -157,8 +164,8 @@ export function Hero() {
                 className={cn(
                   "px-3.5 py-1.5 text-xs md:text-sm font-medium rounded-lg whitespace-nowrap transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 cursor-pointer",
                   activeTab === tab.id
-                    ? "bg-primary text-primary-foreground shadow-md"
-                    : "text-slate-300 hover:text-white hover:bg-white/10"
+                    ? "bg-primary text-primary-foreground shadow-sm"
+                    : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
                 )}
               >
                 {tab.name}
@@ -167,17 +174,17 @@ export function Hero() {
           </div>
 
           {/* Combined Search Bar & Options Panel */}
-          <div className="bg-surface/95 backdrop-blur-xl rounded-2xl md:rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-white/20 overflow-hidden text-left ring-1 ring-black/5">
+          <div className="bg-white/70 backdrop-blur-2xl rounded-2xl md:rounded-3xl shadow-[0_15px_40px_rgb(0,0,0,0.08)] border border-white/60 overflow-hidden text-left ring-1 ring-slate-900/5">
             <form onSubmit={handleSearch} className="p-3 md:p-4 flex flex-col md:flex-row gap-3">
               {/* Input wrapper */}
-              <div className="relative flex-1 flex items-center bg-muted/40 hover:bg-muted/70 focus-within:bg-surface focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-1 rounded-xl transition-all border border-border/50">
+              <div className="relative flex-1 flex items-center h-12 bg-muted/40 hover:bg-muted/70 focus-within:bg-surface focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-1 rounded-xl transition-all border border-border/50">
                 <MapPin className="absolute left-4 h-5 w-5 text-muted-foreground/80 shrink-0" />
                 <input
                   type="text"
                   placeholder={activePlaceholder}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-11 pr-10 py-3 bg-transparent text-sm md:text-base outline-none text-slate-800 placeholder:text-muted-foreground"
+                  className="w-full h-full pl-11 pr-10 bg-transparent text-sm md:text-base outline-none text-slate-800 placeholder:text-muted-foreground"
                 />
                 {searchQuery && (
                   <button
@@ -216,10 +223,12 @@ export function Hero() {
                 {/* Primary Search Button */}
                 <Button
                   type="submit"
-                  className="flex-1 md:flex-initial h-12 px-8 rounded-full bg-primary hover:bg-primary/90 text-white font-semibold flex items-center justify-center gap-2 cursor-pointer shadow-[0_4px_14px_0_rgb(0,118,255,0.39)] transition-transform hover:scale-[1.02] shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]"
+                  className="relative group flex-1 md:flex-initial h-12 px-8 rounded-full bg-primary hover:bg-primary-hover text-white font-semibold flex items-center justify-center gap-2 cursor-pointer transition-all hover:scale-[1.02] overflow-hidden shadow-[0_0_20px_rgba(0,118,255,0.4)]"
                 >
-                  <Search className="h-4 w-4" />
-                  <span>Search</span>
+                  {/* Subtle sweep animation on button */}
+                  <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-[150%] group-hover:translate-x-[150%] transition-transform duration-1000 ease-in-out" />
+                  <Search className="h-4 w-4 relative z-10" />
+                  <span className="relative z-10">Search</span>
                 </Button>
               </div>
             </form>
@@ -314,14 +323,14 @@ export function Hero() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="mt-6 flex flex-wrap justify-center gap-x-2 gap-y-1.5 text-xs md:text-sm text-slate-300 font-light"
+          className="mt-6 flex flex-wrap justify-center gap-x-2 gap-y-1.5 text-xs md:text-sm font-medium"
         >
-          <span className="text-slate-400">Popular Searches:</span>
+          <span className="text-slate-500">Popular Searches:</span>
           {["Executive Detox", "Dual Diagnosis Rehab", "Outpatient PHP", "Holistic Healing"].map((item) => (
             <button
               key={item}
               onClick={() => setSearchQuery(item)}
-              className="text-white underline decoration-slate-500 underline-offset-4 hover:decoration-secondary-foreground transition-colors cursor-pointer"
+              className="text-primary underline decoration-primary/30 underline-offset-4 hover:decoration-primary transition-colors cursor-pointer"
             >
               {item}
             </button>
@@ -336,11 +345,11 @@ export function Hero() {
           className="mt-12 flex flex-wrap justify-center gap-6 md:gap-8"
         >
           {TRUST_TAGS.map((tag, idx) => (
-            <div key={idx} className="flex items-center gap-2 text-slate-300">
-              <div className="h-6 w-6 rounded-full bg-primary/20 flex items-center justify-center text-primary backdrop-blur-sm border border-primary/30">
+            <div key={idx} className="flex items-center gap-2 text-slate-700">
+              <div className="h-6 w-6 rounded-full bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
                 <tag.icon className="h-3 w-3" />
               </div>
-              <span className="text-xs font-medium tracking-wide">{tag.text}</span>
+              <span className="text-xs font-bold tracking-wide">{tag.text}</span>
             </div>
           ))}
         </motion.div>

@@ -16,11 +16,11 @@ async function main() {
   const now = new Date();
 
   // 2. Create Owner/Admin User
-  const passwordHash = await bcrypt.hash("Phoenix123!", 10);
+  const passwordHash = await bcrypt.hash("liorahealth@admin", 10);
   const owner = await prisma.adminUser.create({
     data: {
-      email: "admissions@phoenixrecovery.com",
-      name: "Phoenix Care Admissions Team",
+      email: "lioraadmin@gmail.com",
+      name: "Liora Admin",
       password: passwordHash,
       role: "OWNER",
       createdAt: now,
@@ -40,6 +40,15 @@ async function main() {
   });
   const catIOP = await prisma.facilityCategory.create({
     data: { name: "IOP", slug: "iop", description: "Intensive Outpatient Programs", createdAt: now, updatedAt: now },
+  });
+  const catPHP = await prisma.facilityCategory.create({
+    data: { name: "PHP", slug: "php", description: "Partial Hospitalization Programs", createdAt: now, updatedAt: now },
+  });
+  const catDualDiagnosis = await prisma.facilityCategory.create({
+    data: { name: "Dual Diagnosis", slug: "dual-diagnosis", description: "Co-occurring disorders treatment", createdAt: now, updatedAt: now },
+  });
+  const catSoberLiving = await prisma.facilityCategory.create({
+    data: { name: "Sober Living", slug: "sober-living", description: "Transitional structured housing", createdAt: now, updatedAt: now },
   });
 
   // 4. Create Services
@@ -84,7 +93,7 @@ async function main() {
     "Incredible staff who coordinated perfectly with my private insurance provider. Felt supported from the initial intake call."
   ];
 
-  // 10 Phoenix Facilities Data
+  // 13 Phoenix Facilities Data
   const facilitiesData = [
     {
       name: "Phoenix Recovery & Wellness Center",
@@ -110,7 +119,7 @@ async function main() {
       conditionsTreated: ["Substance Abuse", "Alcohol Addiction", "PTSD & Trauma", "Depression", "Anxiety Disorders", "Co-occurring Disorders"],
       isFeatured: true,
       categoryId: catResidential.id,
-      imageUrls: ["/images/wellness_hero_bg.png", "/images/clinic_one.png", "/images/clinic_two.png"],
+      imageUrls: ["/images/luxury_resort_exterior.png", "/images/luxury_resort_interior.png", "/images/luxury_clinic_room.png"],
     },
     {
       name: "Desert Cove Medical Detox",
@@ -136,7 +145,7 @@ async function main() {
       conditionsTreated: ["Alcohol Detox", "Opioid Withdrawal", "Prescription Drug Abuse"],
       isFeatured: true,
       categoryId: catDetox.id,
-      imageUrls: ["/images/wellness_hero_bg.png"],
+      imageUrls: ["/images/luxury_resort_interior.png", "/images/luxury_clinic_room.png"],
     },
     {
       name: "Camelback Mental Health Clinic",
@@ -162,7 +171,7 @@ async function main() {
       conditionsTreated: ["Depression", "Bipolar Disorder", "PTSD & Trauma", "Anxiety Disorders"],
       isFeatured: true,
       categoryId: catMentalHealth.id,
-      imageUrls: ["/images/clinic_one.png"],
+      imageUrls: ["/images/luxury_resort_interior.png", "/images/luxury_resort_exterior.png"],
     },
     {
       name: "Valley Hope Outpatient Care",
@@ -188,7 +197,7 @@ async function main() {
       conditionsTreated: ["Substance Abuse", "Relapse Prevention", "Family Support"],
       isFeatured: false,
       categoryId: catIOP.id,
-      imageUrls: ["/images/clinic_two.png"],
+      imageUrls: ["/images/luxury_resort_interior.png"],
     },
     {
       name: "Scottsdale Recovery Mansion",
@@ -214,7 +223,7 @@ async function main() {
       conditionsTreated: ["Addiction Rehabilitation", "Executive Burnout", "Dual Diagnosis"],
       isFeatured: true,
       categoryId: catResidential.id,
-      imageUrls: ["/images/wellness_hero_bg.png", "/images/clinic_one.png"],
+      imageUrls: ["/images/luxury_resort_exterior.png", "/images/luxury_clinic_room.png"],
     },
     {
       name: "Phoenix Medical Detox Center",
@@ -240,7 +249,7 @@ async function main() {
       conditionsTreated: ["Alcohol Detox", "Prescription Drug Abuse", "Medical Stabilization"],
       isFeatured: true,
       categoryId: catDetox.id,
-      imageUrls: ["/images/wellness_hero_bg.png"],
+      imageUrls: ["/images/luxury_clinic_room.png", "/images/luxury_resort_interior.png"],
     },
     {
       name: "Biltmore Wellness Resort",
@@ -266,7 +275,7 @@ async function main() {
       conditionsTreated: ["Substance Abuse", "Co-occurring Disorders", "Anxiety Disorders"],
       isFeatured: true,
       categoryId: catResidential.id,
-      imageUrls: ["/images/clinic_one.png", "/images/clinic_two.png"],
+      imageUrls: ["/images/luxury_resort_exterior.png", "/images/luxury_resort_interior.png"],
     },
     {
       name: "Sonoran Desert Rehab",
@@ -292,7 +301,7 @@ async function main() {
       conditionsTreated: ["Substance Abuse", "Alcohol Addiction", "Depression"],
       isFeatured: false,
       categoryId: catResidential.id,
-      imageUrls: ["/images/wellness_hero_bg.png"],
+      imageUrls: ["/images/luxury_resort_interior.png"],
     },
     {
       name: "Arcadia Psychiatric & Trauma Center",
@@ -318,7 +327,7 @@ async function main() {
       conditionsTreated: ["PTSD & Trauma", "Depression", "Co-occurring Disorders"],
       isFeatured: true,
       categoryId: catMentalHealth.id,
-      imageUrls: ["/images/clinic_two.png"],
+      imageUrls: ["/images/luxury_clinic_room.png", "/images/luxury_resort_interior.png"],
     },
     {
       name: "Aura IOP Care Scottsdale",
@@ -344,7 +353,85 @@ async function main() {
       conditionsTreated: ["Substance Abuse", "Addiction Recovery", "Relapse Prevention"],
       isFeatured: false,
       categoryId: catIOP.id,
-      imageUrls: ["/images/clinic_one.png"],
+      imageUrls: ["/images/luxury_resort_interior.png"],
+    },
+    {
+      name: "Oasis PHP Recovery",
+      slug: "oasis-php-recovery",
+      description: "Structured partial hospitalization programs offering day treatment with clinical support.",
+      address: "3200 N Central Ave",
+      city: "Phoenix",
+      state: "AZ",
+      zipCode: "85012",
+      latitude: 33.4832,
+      longitude: -112.0734,
+      phone: "602-555-0111",
+      website: "https://oasisphprecovery.com",
+      isVerified: true,
+      priceMin: 4500,
+      priceMax: 6500,
+      bedsCount: 0,
+      bedsAvailable: 0,
+      insuranceAccepted: "Accepts Aetna, BCBS, Cigna",
+      genderSupport: "Co-Ed",
+      sameDayAdmission: true,
+      licenseStatus: "DHS PHP License: #AZ-3344",
+      conditionsTreated: ["Substance Abuse", "Mental Health Transition", "Dual Diagnosis"],
+      isFeatured: true,
+      categoryId: catPHP.id,
+      imageUrls: ["/images/luxury_resort_interior.png"],
+    },
+    {
+      name: "Harmony Dual Diagnosis Center",
+      slug: "harmony-dual-diagnosis",
+      description: "Specialized integrated treatment for co-occurring mental health and substance use disorders.",
+      address: "5151 N 16th St",
+      city: "Phoenix",
+      state: "AZ",
+      zipCode: "85016",
+      latitude: 33.5124,
+      longitude: -112.0475,
+      phone: "602-555-0112",
+      website: "https://harmonydualdiagnosis.com",
+      isVerified: true,
+      priceMin: 8000,
+      priceMax: 12500,
+      bedsCount: 18,
+      bedsAvailable: 4,
+      insuranceAccepted: "Accepts Most Major Private Insurances",
+      genderSupport: "All Genders Welcome",
+      sameDayAdmission: true,
+      licenseStatus: "Active State License: #AZ-5566-DD",
+      conditionsTreated: ["Dual Diagnosis", "Severe Anxiety", "Substance Abuse"],
+      isFeatured: true,
+      categoryId: catDualDiagnosis.id,
+      imageUrls: ["/images/luxury_resort_exterior.png", "/images/luxury_clinic_room.png"],
+    },
+    {
+      name: "Serenity House Sober Living",
+      slug: "serenity-house-sober-living",
+      description: "A premium structured transitional housing environment supporting long-term sobriety.",
+      address: "8900 E Pinnacle Peak Rd",
+      city: "Scottsdale",
+      state: "AZ",
+      zipCode: "85255",
+      latitude: 33.6987,
+      longitude: -111.8884,
+      phone: "480-555-0113",
+      website: "https://serenityhousesoberliving.com",
+      isVerified: true,
+      priceMin: 1800,
+      priceMax: 3000,
+      bedsCount: 12,
+      bedsAvailable: 3,
+      insuranceAccepted: "Self-Pay Only",
+      genderSupport: "Men Only Program",
+      sameDayAdmission: true,
+      licenseStatus: "Certified Sober Living: #AZ-SL-887",
+      conditionsTreated: ["Aftercare Transition", "Relapse Prevention", "Life Skills Training"],
+      isFeatured: true,
+      categoryId: catSoberLiving.id,
+      imageUrls: ["/images/sober_living_home.png", "/images/luxury_resort_interior.png"],
     }
   ];
 
@@ -404,7 +491,7 @@ async function main() {
     }
   }
 
-  console.log("Seeding of 10 facilities and 30 reviews in Phoenix area completed successfully!");
+  console.log("Seeding of 13 facilities and 39 reviews in Phoenix area completed successfully!");
 }
 
 main()
